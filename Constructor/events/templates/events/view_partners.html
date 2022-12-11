@@ -8,34 +8,16 @@
     <h3>{{ title }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
 </div>
 {% endblock maintitle%}
-<!--{% block categories %}-->
 
-<!--{% endblock %}-->
 {% block content %}
 {% for partner in partners %}
 <div class="card col-md-10 ms-auto">
     <div class="card-header">
-        Категория : <a href="{{ partner.category.get_absolute_url}}">{{item.category}} </a>
+        Name : <a href="{{ partner.get_absolute_url}}">{{partner.name}} </a>
     </div>
     <div class="card-header">
         Service Type : <a href="#">{{partner.service_type}} </a>
     </div>
-<!--    <div class="card-body ">-->
-<!--        <div class="container">-->
-<!--            {% if item.photo %}-->
-<!--            <img src="{{item.photo.url}}" alt="" width="250"  >-->
-<!--            {% else %}-->
-<!--            <img src="https://picsum.photos/id/237/200/300">-->
-<!--            {% endif %}-->
-
-<!--            <h5 class=" card-title {%cycle 'text-primary' 'text-secondary' 'text-success' 'text-danger'%}">-->
-<!--                {{item.title}}</h5>-->
-<!--            <p class="card-text ">{{ item.content| safe }}</p>-->
-<!--            <a href="{{ item.get_absolute_url }}" class="btn btn-primary align-center col-md-4">Подробнее</a>-->
-
-<!--        </div>-->
-
-<!--    </div>-->
 </div>
 {% endfor %}
 {% endblock %}
