@@ -1,6 +1,6 @@
 from django.contrib import messages
 from .models import UserPartner, UserClient
-from .forms import UserClientRegisterForm
+from .forms import UserClientRegisterForm, UserLoginForm
 
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
@@ -67,3 +67,20 @@ def register(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, ' Authentication is FAILED! ')
+    else:
+        form = UserLoginForm()
+
+    return render(request, 'events/login.html', {'form': form,
+                                                 'title': 'Log In'})

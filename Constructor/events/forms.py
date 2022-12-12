@@ -32,3 +32,13 @@ class UserClientRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'phone', 'password1', 'password2']
+
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(max_length=150, label=' Имя пользователя ', help_text='Длина менее 150 символов',
+                               widget=forms.TextInput(attrs={"class": "form-control", "placeholder": " DENDI ..."}))
+
+    password = forms.CharField(max_length=150, label=' Пароль ',
+                             widget=forms.PasswordInput(attrs={"class": "form-control", 'placeholder': '*QWERTY12345*'}))
+

@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse_lazy
 
-from .enums import ServiceTypes, Locations
+from .enums import ServiceTypes, Locations, EventTypes
+
 
 
 # Create your models here.
@@ -54,3 +55,22 @@ class UserPartner(BaseUser):  # vendors
     class Meta:
         verbose_name = 'Партнёр'
         verbose_name_plural = 'Партнёры'
+
+
+class BaseEvent(models.Model):
+    title = models.CharField(max_length=40, verbose_name='Название события')
+    description = models.TextField(blank=True, verbose_name='Описание')  # can be empty
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name='Дата регистрации')  # only in first attempt rewrite date
+    planning_time = models.DateTimeField(verbose_name='Планируемое время события', blank=True)
+    event_type = models.CharField(max_length=60, verbose_name='Тип события', choices=EventTypes.choices, default=EventTypes.PARTY)
+    location = models.CharField(max_length=60, verbose_name='Геопозиция', choices=Locations.choices, default=Locations.MOSCOW)
+    owner = models.ForeignKey(UserClient, on_delete=models.CASCADE)
+    partners = models.ManyToManyField(UserPartner, through='EventVendors', through_fields=('event', 'partner'))
+
+
+class EventVendors(models.Model):
+    partner = models.ForeignKey(UserPartner, on_delete=models.CASCADE)
+    event = models.ForeignKey(BaseEvent, on_delete=models.CASCADE)
+    conditions = models.CharField(max_length=255, blank=True)
+

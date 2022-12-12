@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block maintitle %}
+<div class="col-md-8">
+    <h3>Log in {% now "SHORT_DATETIME_FORMAT" %}</h3>
+
+</div>
+<form action="{% url 'login' %}" method="post">
+
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary btn-block col-md-4" type="submit"> Log in</button>
+</form>
+
+{% endblock %}

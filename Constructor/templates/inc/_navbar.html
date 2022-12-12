@@ -32,7 +32,7 @@
 <!--                <button class="btn btn-outline-success" type="submit">Поиск</button>-->
 <!--            </form>-->
              {% if request.user.is_authenticated %}
-            Welcome , {{ request.user.username }}  |  <a class="auth-modal-toggle btn btn-primary ms-2 me-1 " href="{% url 'logout' %}">Log Out</a>
+            Welcome , {{ request.user.first_name }}  |  <a class="auth-modal-toggle btn btn-primary ms-2 me-1 " href="{% url 'logout' %}">Log Out</a>
              {% else %}
             <span class="navbar-text">
                   <a class="auth-modal-toggle btn btn-outline-primary ms-2 me-1" href="{% url 'register' %}" >Sign In</a> |

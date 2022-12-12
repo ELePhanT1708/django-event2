@@ -16,3 +16,9 @@ class ServiceTypes(models.TextChoices):
     MAKEUP = 'MakeUp'
 
 
+class EventTypes(models.TextChoices):
+    BIRTHDAY = 'Birthday'
+    WEDDING = 'Wedding'
+    TEAM_BUILDING = 'Team Building'
+    NEW_YEAR_EVE = "New Year's Eve"
+    PARTY = 'PARTY'
