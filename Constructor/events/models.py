@@ -10,19 +10,23 @@ class BaseUser(models.Model):
     description = models.TextField(blank=True, verbose_name='Описание')  # can be empty
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='Дата регистрации')  # only in first attempt rewrite date
+    email = models.EmailField(blank=True, max_length=60)
 
     class Meta:
         abstract = True
 
 
 class UserClient(BaseUser):  # Client user who wants to create event
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=60)
-    phone = models.CharField(max_length=12)
-    location = models.CharField(max_length=255, choices=Locations.choices, blank=True)
+    first_name = models.CharField(max_length=50, verbose_name='Имя')
+    last_name = models.CharField(max_length=60, verbose_name='Фамилия')
+    phone = models.CharField(max_length=12, verbose_name='Телефон')
+    django_user_id = models.IntegerField(blank=False, default=1)
+
+    # location = models.CharField(max_length=255, choices=Locations.choices, blank=True, verbose_name='Локация')
+    # location more about event not user ! Right ?
 
     def __str__(self):
-        return f'{self.surname} {self.name}'
+        return f'{self.last_name} {self.first_name}'
 
     def get_absolute_url(self):
         return reverse_lazy('clients', kwargs={'id_client': self.pk})
@@ -33,17 +37,19 @@ class UserClient(BaseUser):  # Client user who wants to create event
 
 
 class UserPartner(BaseUser):  # vendors
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=60)
-    phone = models.CharField(max_length=12)
-    location = models.CharField(max_length=255, choices=Locations.choices, default=Locations.MOSCOW, blank=False)
-    service_type = models.CharField(max_length=255, choices=ServiceTypes.choices, blank=False)
+    name = models.CharField(max_length=50, verbose_name='Имя')
+    surname = models.CharField(max_length=60, verbose_name='Фамилия')
+    phone = models.CharField(max_length=12, verbose_name='Телефон')
+    location = models.CharField(max_length=255, choices=Locations.choices, default=Locations.MOSCOW, blank=False,
+                                verbose_name='Локация')
+    service_type = models.CharField(max_length=255, choices=ServiceTypes.choices, blank=False,
+                                    verbose_name='Тип услуги')
 
     def __str__(self):
         return f'{self.surname} {self.name}'
 
     def get_absolute_url(self):
-        return reverse_lazy('partners', kwargs={'id_partner': self.pk})
+        return reverse_lazy('vendor', kwargs={'id_partner': self.pk})
 
     class Meta:
         verbose_name = 'Партнёр'
