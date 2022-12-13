@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from datetimepicker.widgets import DateTimePicker
-from .models import UserPartner, UserClient, BaseEvent
+from .models import UserPartner, UserClient, BaseEvent, EventVendors
 import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -51,7 +51,7 @@ class TimeInput(forms.TimeInput):
     input_type = 'time'
 
 
-class AddPartnerForm(forms.ModelForm):
+class AddEventForm(forms.ModelForm):
     class Meta:
         model = BaseEvent
         fields = ['title', 'description', 'planning_day', 'planning_time',
@@ -74,3 +74,48 @@ class AddPartnerForm(forms.ModelForm):
 
     def __str__(self):
         return "Добавить событие"
+
+
+class AddPartnerForm(forms.ModelForm):
+    class Meta:
+        model = UserPartner
+        fields = ['username', 'description', 'email', 'name',
+                  'surname', 'phone', 'location', 'service_type']
+        widgets = {
+            'username': forms.TextInput(attrs={"class": "form-control",
+                                               "placeholder": "Login"}),
+
+            'description': forms.Textarea(attrs={"class": "form-control", "rows": 3,
+                                                 "placeholder": "Я крутой ведущий..."}),
+            'email': forms.TextInput(attrs={"class": "form-control",
+                                            "placeholder": "example@mail.ru"}),
+            'name': forms.TextInput(attrs={"class": "form-control",
+                                           "placeholder": "Иван"}),
+            'surname': forms.TextInput(attrs={"class": "form-control",
+                                              "placeholder": "Иванов"}),
+            'phone': forms.TextInput(attrs={"class": "form-control",
+                                            "placeholder": "+79173334455"}),
+            'service_type': forms.Select(attrs={"class": "form-control"}),
+            'location': forms.Select(attrs={"class": "form-control"}),
+        }
+
+    # def __init__(self, *args, **kwargs):
+    #     self.request = kwargs.pop("request")  # store value of request
+    #     super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        return "Стать партнёром"
+
+
+class CreateCooperationForm(forms.ModelForm):
+    class Meta:
+        model = EventVendors
+        fields = ['conditions', 'event']
+        widgets = {
+            'conditions': forms.TextInput(attrs={"class": "form-control",
+                                                 "placeholder": "Я готов предложить 10к"}), \
+            'event': forms.Select(attrs={"class": "form-control"}),
+        }
+
+    def __str__(self):
+        return "Предложить сотрудничество"

@@ -5,22 +5,19 @@
 {% endblock %}
 {% block maintitle %}
 <div class="col-md-12">
-    <h3>{{ title }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
+    <h3>{{ partner }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
 </div>
 {% endblock maintitle%}
 
 {% block content %}
-{{ iterable }}
-{% for event in events %}
-<p>
+
 <div class="card col-md-10 ms-auto">
     <div class="card-header">
-        Name : <a href="{% url 'event' pk=event.id %}">{{ event }} </a>
+        Name : <a href="{{ partner.get_absolute_url}}">{{ partner }} </a>
     </div>
     <div class="card-header">
-        Service Type : <a href="#">{{event.event_type}} </a>
+        Service Type : <a href="#">{{partner.service_type}} </a>
     </div>
+
 </div>
-</p>
-{% endfor %}
 {% endblock %}

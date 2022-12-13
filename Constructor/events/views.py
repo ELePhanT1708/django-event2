@@ -1,6 +1,7 @@
 from django.contrib import messages
-from .models import UserPartner, UserClient, BaseEvent
-from .forms import UserClientRegisterForm, UserLoginForm, AddPartnerForm
+from .models import UserPartner, UserClient, BaseEvent, EventVendors
+from .forms import UserClientRegisterForm, \
+    UserLoginForm, AddEventForm, AddPartnerForm, CreateCooperationForm
 
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
@@ -16,33 +17,42 @@ from django.contrib.auth import authenticate, login, logout
 
 class ViewPartners(ListView):
     model = UserPartner
+    context_object_name = 'partners'
     template_name = 'events/view_partners.html'
-    extra_context = {'title': 'EVENTS PLATFORM',
-                     'partners': UserPartner.objects.all()
-                     }
+    extra_context = {'title': 'EVENTS PLATFORM'}
+
+    def get_queryset(self):
+        return UserPartner.objects.all()
 
 
-# class ViewPartners(DetailView):
-#
-#     model = UserPartner
-#     template_name = 'events/view_partners.html'
-#     extra_context = {'title': 'EVENTS PLATFORM',
-#                      'partners': UserPartner.objects.all()
-#                      }
+class ViewPartner(DetailView):
+    model = UserPartner
+    template_name = 'events/view_partner.html'
+    extra_context = {'title': 'EVENTS PLATFORM'}
+    context_object_name = 'partner'
+
 
 class ViewMyEvents(ListView):
     model = BaseEvent
     template_name = 'events/my_events.html'
     context_object_name = 'events'
     extra_context = {'title': 'EVENTS PLATFORM'}
+    allow_empty = True
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.object_list = None
 
     def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        self.object_list = super().get_queryset()
         context = super(ViewMyEvents, self).get_context_data(**kwargs)
-        q = self.request.user.id
-        context['user'] = q
+        print(f" !!!!!!!!!!{self.request.user} !!!!!!!!!!!!!!!!!!!!!!")
+        context.update({'user': self.request.user})
         return context
 
     def get_queryset(self):
+        print(f'{self.get_context_data()["user"]}')
         queryset = BaseEvent.objects.filter(owner__django_user_id=self.get_context_data()['user'])
         return queryset
 
@@ -102,23 +112,9 @@ def user_login(request):
                                                  'title': 'Log In'})
 
 
-# class CreateEvent(LoginRequiredMixin, CreateView):
-#     form_class = AddPartnerForm
-#     template_name = 'events/add_event.html'
-#     login_url = "/login/"
-#     success_url = reverse_lazy('home')
-#
-#     def get_form_kwargs(self):
-#         """ Passes the request object to the form class.
-#          This is necessary to only display members that belong to a given user"""
-#
-#         kwargs = super(CreateEvent, self).get_form_kwargs()
-#         kwargs['request'] = self.request
-#         return kwargs
-
 def add_event(request):
     if request.method == "POST":
-        form = AddPartnerForm(request.POST)
+        form = AddEventForm(request.POST)
         if form.is_valid():
             event = BaseEvent(title=form.cleaned_data.get('title'),
                               description=form.cleaned_data.get('description'),
@@ -131,5 +127,52 @@ def add_event(request):
             messages.success(request, 'Event was created ! ')
             return redirect('home')
     else:
-        form = AddPartnerForm()
+        form = AddEventForm()
     return render(request, 'events/add_event.html', {'form': form})
+
+
+class EventView(DetailView):
+    template_name = 'events/view_event.html'
+    model = BaseEvent
+    context_object_name = 'event'
+    extra_context = {'title': 'EVENTS PLATFORM'}
+
+
+def add_partner(request):
+    if request.method == "POST":
+        form = AddPartnerForm(request.POST)
+        if form.is_valid():
+            event = UserPartner(username=form.cleaned_data.get('username'),
+                                description=form.cleaned_data.get('description'),
+                                email=form.cleaned_data.get('email'),
+                                name=form.cleaned_data.get('name'),
+                                surname=form.cleaned_data.get('surname'),
+                                phone=form.cleaned_data.get('phone'),
+                                service_type=form.cleaned_data.get('service_type'),
+                                location=form.cleaned_data.get('location'))
+            event.save()
+            messages.success(request, 'Partner was created ! ')
+            return redirect('home')
+    else:
+        form = AddPartnerForm()
+    return render(request, 'events/add_partner.html', {'form': form})
+
+
+def create_cooperation(request, id_partner):
+    if request.method == "POST":
+        form = CreateCooperationForm(data=request.POST)
+        for key in request.POST:
+            print(key)
+        if form.is_valid():
+            cooperation = EventVendors(conditions=form.cleaned_data.get('conditions'),
+                                       partner=UserPartner.objects.get(pk=id_partner),
+                                       event=form.cleaned_data.get('event'))
+            cooperation.save()
+            messages.success(request, 'Cooperation was created ! ')
+            return redirect('home')
+    else:
+        form = CreateCooperationForm()
+        for key, value in request:
+            print(key, value)
+    return render(request, 'events/create_cooperation.html', {'form': form,
+                                                              'partner': UserPartner.objects.get(pk=id_partner)})

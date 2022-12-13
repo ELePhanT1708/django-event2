@@ -11,6 +11,7 @@
 
 {% block content %}
 {% for partner in partners %}
+<p>
 <div class="card col-md-10 ms-auto">
     <div class="card-header">
         Name : <a href="{{ partner.get_absolute_url}}">{{ partner }} </a>
@@ -18,6 +19,9 @@
     <div class="card-header">
         Service Type : <a href="#">{{partner.service_type}} </a>
     </div>
+    <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>
+
 </div>
+</p>
 {% endfor %}
 {% endblock %}

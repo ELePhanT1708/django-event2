@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ form }}
+{% endblock %}
+{% block maintitle %}
+<div class="col-md-12">
+    <h3>{{ form }} </h3>
+
+</div>
+
+<form action="{% url 'add_partner' %}" method="post">
+<div class="row col-md-6">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-block ms-auto"> New Partnership  !!</button>
+</div></form>
+
+
+{% endblock %}
