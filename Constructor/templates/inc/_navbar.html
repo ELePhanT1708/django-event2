@@ -22,7 +22,12 @@
                 </li>
                 {% if request.user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link " href="#">Добавить Событие</a>
+                    <a class="nav-link " href="{% url 'my_events' %}">Мои События</a>
+                </li>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'add_event' %}">Добавить Событие</a>
                 </li>
                 {% endif %}
 
@@ -32,13 +37,16 @@
 <!--                <button class="btn btn-outline-success" type="submit">Поиск</button>-->
 <!--            </form>-->
              {% if request.user.is_authenticated %}
-            Welcome , {{ request.user.first_name }}  |  <a class="auth-modal-toggle btn btn-primary ms-2 me-1 " href="{% url 'logout' %}">Log Out</a>
+            Welcome , {{ request.user.first_name }}  |  <a class="auth-modal-toggle btn btn-primary ms-2 me-1 " href="{% url 'logout' %}">Log Out</a> |
              {% else %}
             <span class="navbar-text">
                   <a class="auth-modal-toggle btn btn-outline-primary ms-2 me-1" href="{% url 'register' %}" >Sign In</a> |
-                <a class="auth-modal-toggle btn btn-outline-primary ms-2 me-1" href="{% url 'login' %}" >Login</a>
+                <a class="auth-modal-toggle btn btn-outline-primary ms-2 me-1" href="{% url 'login' %}" >Login</a> |
             </span>
             {% endif %}
+            <span class="navbar-text">
+                  <a class="auth-modal-toggle btn btn-outline-primary ms-2 me-1" href="{% url 'add_partner' %}" >Partnership</a>
+            </span>
 
         </div>
     </div>

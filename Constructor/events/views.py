@@ -1,6 +1,6 @@
 from django.contrib import messages
-from .models import UserPartner, UserClient
-from .forms import UserClientRegisterForm, UserLoginForm
+from .models import UserPartner, UserClient, BaseEvent
+from .forms import UserClientRegisterForm, UserLoginForm, AddPartnerForm
 
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
@@ -29,6 +29,22 @@ class ViewPartners(ListView):
 #     extra_context = {'title': 'EVENTS PLATFORM',
 #                      'partners': UserPartner.objects.all()
 #                      }
+
+class ViewMyEvents(ListView):
+    model = BaseEvent
+    template_name = 'events/my_events.html'
+    context_object_name = 'events'
+    extra_context = {'title': 'EVENTS PLATFORM'}
+
+    def get_context_data(self, **kwargs):
+        context = super(ViewMyEvents, self).get_context_data(**kwargs)
+        q = self.request.user.id
+        context['user'] = q
+        return context
+
+    def get_queryset(self):
+        queryset = BaseEvent.objects.filter(owner__django_user_id=self.get_context_data()['user'])
+        return queryset
 
 
 class ViewHome(ListView):
@@ -84,3 +100,36 @@ def user_login(request):
 
     return render(request, 'events/login.html', {'form': form,
                                                  'title': 'Log In'})
+
+
+# class CreateEvent(LoginRequiredMixin, CreateView):
+#     form_class = AddPartnerForm
+#     template_name = 'events/add_event.html'
+#     login_url = "/login/"
+#     success_url = reverse_lazy('home')
+#
+#     def get_form_kwargs(self):
+#         """ Passes the request object to the form class.
+#          This is necessary to only display members that belong to a given user"""
+#
+#         kwargs = super(CreateEvent, self).get_form_kwargs()
+#         kwargs['request'] = self.request
+#         return kwargs
+
+def add_event(request):
+    if request.method == "POST":
+        form = AddPartnerForm(request.POST)
+        if form.is_valid():
+            event = BaseEvent(title=form.cleaned_data.get('title'),
+                              description=form.cleaned_data.get('description'),
+                              planning_day=form.cleaned_data.get('planning_day'),
+                              planning_time=form.cleaned_data.get('planning_time'),
+                              event_type=form.cleaned_data.get('event_type'),
+                              location=form.cleaned_data.get('location'),
+                              owner=UserClient.objects.get(django_user_id=request.user.id))
+            event.save()
+            messages.success(request, 'Event was created ! ')
+            return redirect('home')
+    else:
+        form = AddPartnerForm()
+    return render(request, 'events/add_event.html', {'form': form})

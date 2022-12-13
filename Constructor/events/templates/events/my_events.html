@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block maintitle %}
+<div class="col-md-12">
+    <h3>{{ title }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
+</div>
+{% endblock maintitle%}
+
+{% block content %}
+{% for event in events %}
+<div class="card col-md-10 ms-auto">
+    <div class="card-header">
+        Name : <a href="#">{{ event }} </a>
+    </div>
+    <div class="card-header">
+        Service Type : <a href="#">{{event.service_type}} </a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
