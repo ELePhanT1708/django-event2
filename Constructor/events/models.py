@@ -47,6 +47,7 @@ class UserPartner(BaseUser):  # vendors
                                 verbose_name='Город')
     service_type = models.CharField(max_length=255, choices=ServiceTypes.choices, blank=False,
                                     verbose_name='Тип услуги')
+    photo = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Фото', blank=True)
 
     def __str__(self):
         return f'{self.surname} {self.name}'
@@ -91,3 +92,8 @@ class EventVendors(models.Model):
     class Meta:
         verbose_name = 'Партнеры в событие'
         verbose_name_plural = 'Партнеры в событиях'
+
+
+# class PartnerPhoto(models.Model):
+#     image = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Фото', blank=True)
+#     partner = models.ForeignKey(UserPartner, related_name='photos', on_delete=models.CASCADE)

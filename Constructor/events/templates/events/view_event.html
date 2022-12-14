@@ -10,21 +10,22 @@
 {% endblock maintitle%}
 
 {% block content %}
-
-<div class="card col-md-10 ms-auto" align="center">
-    <div class="card-header">
-        Name : <a href="{{ event.get_absolute_url}}">{{ event }} </a>
-    </div>
-    <div class="card-body" align="center">
-        <p>
-            Service Type : <a href="#">{{event.event_type}} </a>
-        </p>
-        {% for eventvendor in eventvendors %}
-        <p>
-            Partners: <a href="{% url 'vendor' pk=partner.id">{{ eventvendor.partner }} </a>
-            Type : <a href="#">{{ eventvendor.partner.service_type }} </a>
-        </p>
-        {% endfor %}
+<div class="container" align="center">
+    <div class="col-md-10 ms-auto" align="center">
+        <div class="header">
+            Name : <a href="{{ event.get_absolute_url}}">{{ event }} </a>
+        </div>
+        <div class="body" >
+            <p>
+                Service Type : <a href="#">{{event.event_type}} </a>
+            </p>
+            {% for eventvendor in eventvendors %}
+            <p>
+                Partners: <a href="{% url 'vendor' pk=partner.id">{{ eventvendor.partner }} </a>
+                Type : <a href="#">{{ eventvendor.partner.service_type }} </a>
+            </p>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

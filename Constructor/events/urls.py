@@ -9,8 +9,9 @@ from .views import (ViewPartners,
                     ViewMyEvents,
                     add_partner,
                     create_cooperation,
-                    EventView
+                    EventView, CreatePartner
                     )
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', ViewHome.as_view(), name='home'),
@@ -29,3 +30,5 @@ urlpatterns = [
 
 
 ]
+
+

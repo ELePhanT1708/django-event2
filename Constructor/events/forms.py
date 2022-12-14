@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from datetimepicker.widgets import DateTimePicker
+
+from .enums import ServiceTypes, Locations
 from .models import UserPartner, UserClient, BaseEvent, EventVendors
 import re
 from django.core.exceptions import ValidationError
@@ -77,10 +79,34 @@ class AddEventForm(forms.ModelForm):
 
 
 class AddPartnerForm(forms.ModelForm):
+    # username = forms.CharField(max_length=40, label='Никнейм', help_text='Длина менее 40 символов',
+    #                            widget=forms.TextInput(attrs={"class": "form-control",
+    #                                                          "placeholder": "Login"}))
+    # description = forms.CharField(required=False, label='Описание',
+    #                               widget=forms.Textarea(attrs={"class": "form-control", "rows": 3,
+    #                                                            "placeholder": "Я крутой ведущий..."}))
+    # email = forms.CharField(max_length=60, label='Email', help_text='Длина менее 60 символов',
+    #                         widget=forms.TextInput(attrs={"class": "form-control",
+    #                                                       "placeholder": "example@mail.ru"}))
+    # name = forms.CharField(max_length=50, label='First_name', help_text='Длина менее 50 символов',
+    #                        widget=forms.TextInput(attrs={"class": "form-control",
+    #                                                      "placeholder": "Иван"}))
+    # surname = forms.CharField(max_length=60, label='Last_name', help_text='Длина менее 60 символов',
+    #                           widget=forms.TextInput(attrs={"class": "form-control",
+    #                                                         "placeholder": "Иванов"}))
+    # phone = forms.CharField(max_length=12, label='Phone', help_text='Длина менее 12 символов',
+    #                         widget=forms.TextInput(attrs={"class": "form-control",
+    #                                                       "placeholder": "+79173334455"}))
+    # service_type = forms.ChoiceField(choices=ServiceTypes.choices,
+    #                                  widget=forms.Select(attrs={"class": "form-control"}))
+    # photos = forms.ImageField(label=u'Фотографии', widget=forms.FileInput(attrs={'multiple': 'multiple'}),
+    #                           required=False)
+    # location = forms.ChoiceField(choices=Locations.choices, widget=forms.Select(attrs={"class": "form-control"}))
+
     class Meta:
         model = UserPartner
         fields = ['username', 'description', 'email', 'name',
-                  'surname', 'phone', 'location', 'service_type']
+                  'surname', 'phone', 'location', 'service_type', 'photo']
         widgets = {
             'username': forms.TextInput(attrs={"class": "form-control",
                                                "placeholder": "Login"}),

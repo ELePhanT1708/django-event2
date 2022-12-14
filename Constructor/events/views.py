@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.core.files.base import ContentFile
+
 from .models import UserPartner, UserClient, BaseEvent, EventVendors
 from .forms import UserClientRegisterForm, \
     UserLoginForm, AddEventForm, AddPartnerForm, CreateCooperationForm
@@ -6,7 +8,7 @@ from .forms import UserClientRegisterForm, \
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.http import HttpResponse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -32,11 +34,16 @@ class ViewPartner(DetailView):
     context_object_name = 'partner'
 
 
+class CreatePartner(FormView):
+    form_class = AddPartnerForm
+    template_name = 'events/add_partner.html'
+    extra_context = {'form': 'Добавить партнёра !'}
+
+
 class ViewHome(ListView):
     model = UserPartner
     template_name = 'events/home_page.html'
-    extra_context = {'title': 'EVENTS PLATFORM',
-                     }
+    extra_context = {'title': 'EVENTS PLATFORM'}
 
 
 def register(request):
@@ -138,25 +145,30 @@ class EventView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data()
-        context['eventvendors'] = EventVendors.objects.filter(event__owner__django_user_id=self.request.user.id, )
+        context['eventvendors'] = EventVendors.objects.filter(event__owner__django_user_id=self.request.user.id,
+                                                              event_id=kwargs['object'].id)
         return context
 
 
 def add_partner(request):
     if request.method == "POST":
-        form = AddPartnerForm(request.POST)
+        form = AddPartnerForm(request.POST, request.FILES)
         if form.is_valid():
-            event = UserPartner(username=form.cleaned_data.get('username'),
-                                description=form.cleaned_data.get('description'),
-                                email=form.cleaned_data.get('email'),
-                                name=form.cleaned_data.get('name'),
-                                surname=form.cleaned_data.get('surname'),
-                                phone=form.cleaned_data.get('phone'),
-                                service_type=form.cleaned_data.get('service_type'),
-                                location=form.cleaned_data.get('location'))
-            event.save()
+            # partner = UserPartner(username=form.cleaned_data.get('username'),
+            #                       description=form.cleaned_data.get('description'),
+            #                       email=form.cleaned_data.get('email'),
+            #                       name=form.cleaned_data.get('name'),
+            #                       surname=form.cleaned_data.get('surname'),
+            #                       phone=form.cleaned_data.get('phone'),
+            #                       service_type=form.cleaned_data.get('service_type'),
+            #                       location=form.cleaned_data.get('location'),
+            #                       photo=form.cleaned_data.get('photo'))
+            form.save()
+            img_obj = form.instance
             messages.success(request, 'Partner was created ! ')
-            return redirect('home')
+            return render(request, 'events/add_partner.html', {'form': form, 'img_obj': img_obj})
+
+            # return redirect('home')
     else:
         form = AddPartnerForm()
     return render(request, 'events/add_partner.html', {'form': form})

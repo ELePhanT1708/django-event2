@@ -1,0 +1,15 @@
+body{
+    background-color: #f6f6f6;
+}
+.errorlist{
+    color: red;
+}
+
+.card{
+    width: 300px;
+    height: 400px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
