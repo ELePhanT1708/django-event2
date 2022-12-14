@@ -11,17 +11,30 @@
 
 {% block content %}
 {% for partner in partners %}
-<p>
-<div class="card col-md-10 ms-auto">
-    <div class="card-header">
-        Name : <a href="{{ partner.get_absolute_url}}">{{ partner }} </a>
+<div class="card col-md-3"
+     style="width: 300px;height: 400px;margin-left: 10px;margin-right: 10px;margin-bottom: 15px;margin-top: 15px;"
+     align="center">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="{{ partner.get_absolute_url}}">{{ partner }}
+            </a>
+        </h5>
+        <p class="card-text">Service Type : <a href="#">{{partner.service_type}} </a></p>
+        <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>
     </div>
-    <div class="card-header">
-        Service Type : <a href="#">{{partner.service_type}} </a>
-    </div>
-    <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>
-
 </div>
-</p>
+<!--<p>-->
+<!--<div class="card col-md-10 ms-auto">-->
+<!--    <div class="card-header">-->
+<!--        Name : <a href="{{ partner.get_absolute_url}}">{{ partner }} </a>-->
+<!--    </div>-->
+<!--    <div class="card-header">-->
+<!--        Service Type : <a href="#">{{partner.service_type}} </a>-->
+<!--    </div>-->
+<!--    <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>-->
+
+<!--</div>-->
+<!--</p>-->
 {% endfor %}
 {% endblock %}

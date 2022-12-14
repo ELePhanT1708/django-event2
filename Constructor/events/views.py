@@ -32,31 +32,6 @@ class ViewPartner(DetailView):
     context_object_name = 'partner'
 
 
-class ViewMyEvents(ListView):
-    model = BaseEvent
-    template_name = 'events/my_events.html'
-    context_object_name = 'events'
-    extra_context = {'title': 'EVENTS PLATFORM'}
-    allow_empty = True
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.object_list = None
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        self.object_list = super().get_queryset()
-        context = super(ViewMyEvents, self).get_context_data(**kwargs)
-        print(f" !!!!!!!!!!{self.request.user} !!!!!!!!!!!!!!!!!!!!!!")
-        context.update({'user': self.request.user})
-        return context
-
-    def get_queryset(self):
-        print(f'{self.get_context_data()["user"]}')
-        queryset = BaseEvent.objects.filter(owner__django_user_id=self.get_context_data()['user'])
-        return queryset
-
-
 class ViewHome(ListView):
     model = UserPartner
     template_name = 'events/home_page.html'
@@ -131,11 +106,40 @@ def add_event(request):
     return render(request, 'events/add_event.html', {'form': form})
 
 
+class ViewMyEvents(ListView):
+    model = BaseEvent
+    template_name = 'events/my_events.html'
+    context_object_name = 'events'
+    extra_context = {'title': 'EVENTS PLATFORM'}
+    allow_empty = True
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.object_list = None
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        self.object_list = super().get_queryset()
+        context = super(ViewMyEvents, self).get_context_data(**kwargs)
+        context.update({'user': self.request.user})
+        return context
+
+    def get_queryset(self):
+        queryset = BaseEvent.objects.filter(owner__django_user_id=self.get_context_data()['user'])
+        return queryset
+
+
 class EventView(DetailView):
     template_name = 'events/view_event.html'
     model = BaseEvent
     context_object_name = 'event'
-    extra_context = {'title': 'EVENTS PLATFORM'}
+    extra_context = {'title': 'EVENTS PLATFORM',
+                     }
+
+    def get_context_data(self, **kwargs):
+        context = super(EventView, self).get_context_data()
+        context['eventvendors'] = EventVendors.objects.filter(event__owner__django_user_id=self.request.user.id, )
+        return context
 
 
 def add_partner(request):

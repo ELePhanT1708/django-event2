@@ -12,15 +12,18 @@
 {% block content %}
 {{ iterable }}
 {% for event in events %}
-<p>
-<div class="card col-md-10 ms-auto">
-    <div class="card-header">
-        Name : <a href="{% url 'event' pk=event.id %}">{{ event }} </a>
-    </div>
-    <div class="card-header">
-        Service Type : <a href="#">{{event.event_type}} </a>
+
+<div class="card col-md-3"
+     style="width: 300px;height: 400px;margin-left: 10px;margin-right: 10px;margin-bottom: 15px;margin-top: 15px;"
+     align="center">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+        <h5 class="card-title">{{ event }}</h5>
+        <p class="card-text">{{ event.description }}</p>
+        <a href="{% url 'event' pk=event.id %}" class="btn btn-primary">More Info</a>
     </div>
 </div>
-</p>
+
+
 {% endfor %}
 {% endblock %}
