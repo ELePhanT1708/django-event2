@@ -5,7 +5,7 @@
 {% endblock %}
 {% block maintitle %}
 <div class="col-md-12">
-    <h3>{{ title }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
+    <h3>Мои события</h3>
 </div>
 {% endblock maintitle%}
 
@@ -15,11 +15,12 @@
 
 <div class="card col-md-3"
      align="center">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <img class="card-img-top" src="{{ event.photo.url }}" alt="Card image cap">
     <div class="card-body">
         <h5 class="card-title">{{ event }}</h5>
         <p class="card-text">{{ event.description }}</p>
-        <a href="{% url 'event' pk=event.id %}" class="btn btn-primary">More Info</a>
+        <p class="card-text"><a href="{% url 'event' pk=event.id %}" class="btn btn-primary">More Info</a></p>
+
     </div>
 </div>
 

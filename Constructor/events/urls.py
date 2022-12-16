@@ -9,7 +9,7 @@ from .views import (ViewPartners,
                     ViewMyEvents,
                     add_partner,
                     create_cooperation,
-                    EventView, CreatePartner
+                    EventView
                     )
 from django.conf.urls.static import static
 

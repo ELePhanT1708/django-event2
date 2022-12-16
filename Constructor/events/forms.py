@@ -57,7 +57,7 @@ class AddEventForm(forms.ModelForm):
     class Meta:
         model = BaseEvent
         fields = ['title', 'description', 'planning_day', 'planning_time',
-                  'event_type', 'location']
+                  'event_type', 'location', 'photo']
         widgets = {
             'title': forms.TextInput(attrs={"class": "form-control",
                                             "placeholder": "My wedding day"}),

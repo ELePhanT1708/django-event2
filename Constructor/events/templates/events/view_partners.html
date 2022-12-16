@@ -5,22 +5,26 @@
 {% endblock %}
 {% block maintitle %}
 <div class="col-md-12">
-    <h3>{{ title }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
+    <h3>Партнёры</h3>
 </div>
 {% endblock maintitle%}
 
 {% block content %}
 {% for partner in partners %}
-<div class="card col-md-3"
-
-     align="center">
-    <img class="card-img-top" src="..." alt="Card image cap">
+<div class="card col-md-3" align="center">
+    {% if partner.photo %}
+    <img class="card-img-top" src="{{partner.photo.url}}"  width="400" height="250" alt="Card image cap">
+    {% endif %}
     <div class="card-body">
         <h5 class="card-title">
             <a href="{{ partner.get_absolute_url}}">{{ partner }}
             </a>
         </h5>
-        <p class="card-text">Service Type : <a href="#">{{partner.service_type}} </a></p>
+        <p class="card-text"><strong>Service Type :</strong> <a href="#">{{partner.service_type}}<br></a>
+            <strong>City :</strong> <a href="#">{{ partner.location }}</a>
+        <p class="card-description"> {{ partner.description | safe }}</p>
+            </p>
+
         <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>
     </div>
 </div>

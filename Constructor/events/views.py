@@ -22,6 +22,7 @@ class ViewPartners(ListView):
     context_object_name = 'partners'
     template_name = 'events/view_partners.html'
     extra_context = {'title': 'EVENTS PLATFORM'}
+    paginate_by = 6
 
     def get_queryset(self):
         return UserPartner.objects.all()
@@ -34,16 +35,10 @@ class ViewPartner(DetailView):
     context_object_name = 'partner'
 
 
-class CreatePartner(FormView):
-    form_class = AddPartnerForm
-    template_name = 'events/add_partner.html'
-    extra_context = {'form': 'Добавить партнёра !'}
-
-
 class ViewHome(ListView):
     model = UserPartner
     template_name = 'events/home_page.html'
-    extra_context = {'title': 'EVENTS PLATFORM'}
+    extra_context = {'title': 'EVENTS PLATFORM', 'partner': UserPartner.objects.first()}
 
 
 def register(request):
@@ -96,7 +91,8 @@ def user_login(request):
 
 def add_event(request):
     if request.method == "POST":
-        form = AddEventForm(request.POST)
+        form = AddEventForm(request.POST, request.FILES)
+        print(request.FILES['photo'])
         if form.is_valid():
             event = BaseEvent(title=form.cleaned_data.get('title'),
                               description=form.cleaned_data.get('description'),
@@ -104,13 +100,15 @@ def add_event(request):
                               planning_time=form.cleaned_data.get('planning_time'),
                               event_type=form.cleaned_data.get('event_type'),
                               location=form.cleaned_data.get('location'),
-                              owner=UserClient.objects.get(django_user_id=request.user.id))
+                              owner=UserClient.objects.get(django_user_id=request.user.id),
+                              photo=request.FILES['photo'])
             event.save()
             messages.success(request, 'Event was created ! ')
             return redirect('home')
     else:
         form = AddEventForm()
-    return render(request, 'events/add_event.html', {'form': form})
+    return render(request, 'events/add_event.html', {'form': form,
+                                                     'title': 'EVENTS PLATFORM'})
 
 
 class ViewMyEvents(ListView):
@@ -154,15 +152,6 @@ def add_partner(request):
     if request.method == "POST":
         form = AddPartnerForm(request.POST, request.FILES)
         if form.is_valid():
-            # partner = UserPartner(username=form.cleaned_data.get('username'),
-            #                       description=form.cleaned_data.get('description'),
-            #                       email=form.cleaned_data.get('email'),
-            #                       name=form.cleaned_data.get('name'),
-            #                       surname=form.cleaned_data.get('surname'),
-            #                       phone=form.cleaned_data.get('phone'),
-            #                       service_type=form.cleaned_data.get('service_type'),
-            #                       location=form.cleaned_data.get('location'),
-            #                       photo=form.cleaned_data.get('photo'))
             form.save()
             img_obj = form.instance
             messages.success(request, 'Partner was created ! ')
@@ -171,7 +160,8 @@ def add_partner(request):
             # return redirect('home')
     else:
         form = AddPartnerForm()
-    return render(request, 'events/add_partner.html', {'form': form})
+    return render(request, 'events/add_partner.html', {'form': form,
+                                                     'title': 'EVENTS PLATFORM'})
 
 
 def create_cooperation(request, id_partner):

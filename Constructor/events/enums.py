@@ -9,7 +9,7 @@ class Locations(models.TextChoices):
 
 
 class ServiceTypes(models.TextChoices):
-    PHOTOGRAPH = 'photo', _('Photographer')
+    PHOTOGRAPH = 'Photographer'
     DJ = 'DJ'
     FOOD = 'Food'
     PLACE = 'Place'

@@ -50,7 +50,7 @@ class UserPartner(BaseUser):  # vendors
     photo = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Фото', blank=True)
 
     def __str__(self):
-        return f'{self.surname} {self.name}'
+        return f'{self.name} {self.surname}'
 
     def get_absolute_url(self):
         return reverse_lazy('vendor', kwargs={'pk': self.pk})
@@ -72,6 +72,7 @@ class BaseEvent(models.Model):
                                 choices=Locations.choices, default=Locations.MOSCOW)
     owner = models.ForeignKey(UserClient, on_delete=models.CASCADE)
     partners = models.ManyToManyField(UserPartner, through='EventVendors', through_fields=('event', 'partner'))
+    photo = models.ImageField(upload_to='photo/events/%Y/%m/%d', verbose_name='Фото', blank=True)
 
     class Meta:
         verbose_name = 'Событие'

@@ -5,19 +5,23 @@
 {% endblock %}
 {% block maintitle %}
 <div class="col-md-12">
-    <h3>{{ partner }} на {% now "SHORT_DATETIME_FORMAT" %}</h3>
+    <h3>{{ partner }} </h3>
 </div>
 {% endblock maintitle%}
 
 {% block content %}
 
-<div class="card col-md-10 ms-auto">
-    <div class="card-header">
+<div class="container col-md-8">
+    <div class="container-header">
         Name : <a href="{{ partner.get_absolute_url}}">{{ partner }} </a>
     </div>
-    <div class="card-header">
+    <div class="container-body">
         Service Type : <a href="#">{{partner.service_type}} </a>
     </div>
+    <div class="container-img-right">
+        <img src="{{ partner.photo.url }}" width="450">
+    </div>
+    <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>
 
 </div>
 {% endblock %}
