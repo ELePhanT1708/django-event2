@@ -47,7 +47,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
 
-            client = UserClient(django_user_id=user.id,
+            client = UserClient(django_user_id=user,
                                 username=form.cleaned_data.get('username'),
                                 email=form.cleaned_data.get('email'),
                                 first_name=user.first_name,
@@ -126,11 +126,12 @@ class ViewMyEvents(ListView):
         # Call the base implementation first to get a context
         self.object_list = super().get_queryset()
         context = super(ViewMyEvents, self).get_context_data(**kwargs)
-        context.update({'user': self.request.user})
+        context.update({'events': self.get_queryset()})
         return context
 
     def get_queryset(self):
-        queryset = BaseEvent.objects.filter(owner__django_user_id=self.get_context_data()['user'])
+        queryset = super(ViewMyEvents, self).get_queryset()
+        queryset = queryset.filter(owner__django_user_id=self.request.user.id)
         return queryset
 
 

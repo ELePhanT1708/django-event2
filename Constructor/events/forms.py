@@ -23,7 +23,7 @@ class UserClientRegisterForm(UserCreationForm):
                                     attrs={"class": "form-control", 'placeholder': 'Бабкина'}))
     phone = forms.CharField(max_length=12, label=' Номер пользователя ',
                             widget=forms.TextInput(
-                                attrs={"class": "form-control", 'placeholder': 'Надежда'}))
+                                attrs={"class": "form-control", 'placeholder': '89179220047'}))
     password1 = forms.CharField(max_length=150, label=' Пароль ',
                                 widget=forms.PasswordInput(
                                     attrs={"class": "form-control", 'placeholder': '*QWERTY12345*'}))

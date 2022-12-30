@@ -25,7 +25,7 @@
         <p class="card-description"> {{ partner.description | safe }}</p>
             </p>
 
-        <a href="{% url 'create_cooperation' id_partner=partner.id %}" class="btn btn-primary btn-block"> Предложить сотрудничетсво </a>
+        <a href="{% url 'vendor' pk=partner.id %}" class="btn btn-primary btn-block"> Подробнее </a>
     </div>
 </div>
 <!--<p>-->

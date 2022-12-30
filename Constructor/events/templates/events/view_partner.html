@@ -16,7 +16,8 @@
         Name : <a href="{{ partner.get_absolute_url}}">{{ partner }} </a>
     </div>
     <div class="container-body">
-        Service Type : <a href="#">{{partner.service_type}} </a>
+        Service Type : <a href="#">{{partner.service_type}} </a> <br>
+        Description : {{ partner.description }}
     </div>
     <div class="container-img-right">
         <img src="{{ partner.photo.url }}" width="450">
