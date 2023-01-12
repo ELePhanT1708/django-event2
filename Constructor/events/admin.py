@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserPartner, UserClient, BaseEvent, EventVendors
+from .models import UserPartner, UserClient, BaseEvent, EventVendors, Locations
 from django.contrib.auth.admin import UserAdmin
 
 from .models import BaseUser
@@ -9,3 +9,4 @@ admin.site.register(UserClient)
 admin.site.register(UserPartner)
 admin.site.register(BaseEvent)
 admin.site.register(EventVendors)
+admin.site.register(Locations)

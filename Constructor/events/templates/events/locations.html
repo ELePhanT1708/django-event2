@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block maintitle %}
+<div class="col-md-12">
+    <h3>Города</h3>
+</div>
+{% endblock maintitle%}
+
+{% block content %}
+{% for city in cities %}
+<div class="card col-md-3" align="center">
+    {% if city.photo %}
+    <img class="card-img-top" src="{{city.photo.url}}"  width="400" height="250" alt="Card image cap">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="{{ city.get_absolute_url}}">{{ city }}
+            </a>
+        </h5>
+        <p class="card-description-1"> {{ city.description | safe }}</p>
+            </p>
+
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

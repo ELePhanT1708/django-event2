@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.files.base import ContentFile
 
-from .models import UserPartner, UserClient, BaseEvent, EventVendors
+from .models import UserPartner, UserClient, BaseEvent, EventVendors, Locations
 from .forms import UserClientRegisterForm, \
     UserLoginForm, AddEventForm, AddPartnerForm, CreateCooperationForm
 
@@ -28,6 +28,17 @@ class ViewPartners(ListView):
         return UserPartner.objects.all()
 
 
+class ViewLocations(ListView):
+    model = Locations
+    context_object_name = 'cities'
+    template_name = 'events/locations.html'
+    extra_context = {'title': 'EVENTS PLATFORM'}
+    paginate_by = 6
+
+    def get_queryset(self):
+        return Locations.objects.all()
+
+
 class ViewPartner(DetailView):
     model = UserPartner
     template_name = 'events/view_partner.html'
@@ -38,7 +49,7 @@ class ViewPartner(DetailView):
 class ViewHome(ListView):
     model = UserPartner
     template_name = 'events/home_page.html'
-    extra_context = {'title': 'EVENTS PLATFORM', 'partner': UserPartner.objects.first()}
+    extra_context = {'title': 'EVENTS PLATFORM', 'partner': 1}  # UserPartner.objects.first()
 
 
 def register(request):
@@ -162,7 +173,7 @@ def add_partner(request):
     else:
         form = AddPartnerForm()
     return render(request, 'events/add_partner.html', {'form': form,
-                                                     'title': 'EVENTS PLATFORM'})
+                                                       'title': 'EVENTS PLATFORM'})
 
 
 def create_cooperation(request, id_partner):

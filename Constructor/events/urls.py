@@ -9,16 +9,17 @@ from .views import (ViewPartners,
                     ViewMyEvents,
                     add_partner,
                     create_cooperation,
-                    EventView
+                    EventView, ViewLocations
                     )
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', ViewHome.as_view(), name='home'),
+    path('home', ViewHome.as_view(), name='home'),
     path('contact/', ViewPartners.as_view(), name='contact'),
     path('register/', register, name='register'),
     path('logout/', user_logout, name='logout'),
     path('login/', user_login, name='login'),
+    path('locations/', ViewLocations.as_view(), name='locations'),
     path('clients/<int:id_client>', ViewPartners.as_view(), name='clients'),
     path('vendors/add/', add_partner, name='add_partner'),
     path('vendors/profile/<int:pk>', ViewPartner.as_view(), name='vendor'),

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
 
-from .enums import ServiceTypes, Locations, EventTypes
+from .enums import ServiceTypes, EventTypes
 
 
 # Create your models here.
@@ -18,6 +18,18 @@ class BaseUser(models.Model):
     class Meta:
         abstract = True
 
+
+class Locations(models.Model):
+    name = models.CharField(max_length=60, default='Moscow')
+    photo = models.ImageField(upload_to='photo/locations/%Y/%m/%d', verbose_name='Фото', blank=True)
+    description = models.CharField(max_length=300, default='Город не описан')
+
+    class Meta:
+        verbose_name = 'Город'
+        verbose_name_plural = 'Города'
+
+    def __str__(self):
+        return f'{self.name}'
 
 class UserClient(BaseUser):  # Client user who wants to create event
     first_name = models.CharField(max_length=50, verbose_name='Имя')
@@ -43,8 +55,9 @@ class UserPartner(BaseUser):  # vendors
     name = models.CharField(max_length=50, verbose_name='Имя')
     surname = models.CharField(max_length=60, verbose_name='Фамилия')
     phone = models.CharField(max_length=12, verbose_name='Телефон')
-    location = models.CharField(max_length=255, choices=Locations.choices, default=Locations.MOSCOW, blank=False,
-                                verbose_name='Город')
+    # location = models.CharField(max_length=255, choices=Locations.choices, default=Locations.MOSCOW, blank=False,
+    #                             verbose_name='Город')
+    location = models.ForeignKey(Locations, on_delete=models.CASCADE)
     service_type = models.CharField(max_length=255, choices=ServiceTypes.choices, blank=False,
                                     verbose_name='Тип услуги')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Фото', blank=True)
@@ -68,8 +81,9 @@ class BaseEvent(models.Model):
     planning_time = models.TimeField(verbose_name='Планируемое время события', blank=True)
     event_type = models.CharField(max_length=60, verbose_name='Тип события',
                                   choices=EventTypes.choices, default=EventTypes.PARTY)
-    location = models.CharField(max_length=60, verbose_name='Геопозиция',
-                                choices=Locations.choices, default=Locations.MOSCOW)
+    # location = models.CharField(max_length=60, verbose_name='Геопозиция',
+    #                             choices=Locations.choices, default=Locations.MOSCOW)
+    location = models.ForeignKey(Locations, on_delete=models.CASCADE)
     owner = models.ForeignKey(UserClient, on_delete=models.CASCADE)
     partners = models.ManyToManyField(UserPartner, through='EventVendors', through_fields=('event', 'partner'))
     photo = models.ImageField(upload_to='photo/events/%Y/%m/%d', verbose_name='Фото', blank=True)
@@ -93,7 +107,6 @@ class EventVendors(models.Model):
     class Meta:
         verbose_name = 'Партнеры в событие'
         verbose_name_plural = 'Партнеры в событиях'
-
 
 # class PartnerPhoto(models.Model):
 #     image = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Фото', blank=True)
