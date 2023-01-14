@@ -31,6 +31,7 @@ class Locations(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+
 class UserClient(BaseUser):  # Client user who wants to create event
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=60, verbose_name='Фамилия')
@@ -111,3 +112,11 @@ class EventVendors(models.Model):
 # class PartnerPhoto(models.Model):
 #     image = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Фото', blank=True)
 #     partner = models.ForeignKey(UserPartner, related_name='photos', on_delete=models.CASCADE)
+
+
+class HomePagePictures(models.Model):
+    photo = models.ImageField(upload_to='photo/homepage/%Y/%m/%d', verbose_name='Фото', blank=True)
+
+    class Meta:
+        verbose_name = 'Картинка для главной страницы'
+        verbose_name_plural = 'Картинки для главной страницы'

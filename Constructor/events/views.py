@@ -1,7 +1,8 @@
+from random import randrange
 from django.contrib import messages
 from django.core.files.base import ContentFile
 
-from .models import UserPartner, UserClient, BaseEvent, EventVendors, Locations
+from .models import UserPartner, UserClient, BaseEvent, EventVendors, Locations, HomePagePictures
 from .forms import UserClientRegisterForm, \
     UserLoginForm, AddEventForm, AddPartnerForm, CreateCooperationForm
 
@@ -49,7 +50,11 @@ class ViewPartner(DetailView):
 class ViewHome(ListView):
     model = UserPartner
     template_name = 'events/home_page.html'
-    extra_context = {'title': 'EVENTS PLATFORM', 'partner': 1}  # UserPartner.objects.first()
+    extra_context = {'title': 'EVENTS PLATFORM',
+                     'picture1': HomePagePictures.objects.filter(id=1).first(),
+                     'picture2': HomePagePictures.objects.filter(id=2).first(),
+                     'picture3': HomePagePictures.objects.filter(id=3).first(),
+                     'picture4': HomePagePictures.objects.filter(id=4).first()}
 
 
 def register(request):
