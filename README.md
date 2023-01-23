@@ -1,4 +1,4 @@
-# PLatfrom for arranging meetings , especially events as wedding and etc.
+# PLatfrom for arranging events 
 
 
 ## Idea 
